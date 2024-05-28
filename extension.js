@@ -248,16 +248,16 @@ function createEmptyObjectFromKeys(item, dataObject) {
   return result;
 }
 
-function generateDataString(obj, indent = "      ") {
+function generateDataString(obj, indent = "") {
   return Object.entries(obj)
     .map(([key, value]) => {
       if (value === null) {
         return `${indent}${key}: null`;
       } else if (Array.isArray(value)) {
-        const arrayContent = value.map(item => `${indent + "  "}{\n${generateDataString(item, indent + "    ")}\n${indent + "  "}}`).join(",\n");
+        const arrayContent = value.map(item => `${indent}  {\n${generateDataString(item, `${indent}    `)}\n${indent}  }`).join(",\n");
         return `${indent}${key}: [\n${arrayContent}\n${indent}]`;
       } else if (typeof value === "object") {
-        return `${indent}${key}: {\n${generateDataString(value, indent + "  ")}\n${indent}}`;
+        return `${indent}${key}: {\n${generateDataString(value, `${indent}  `)}\n${indent}}`;
       }
     })
     .join(",\n");
@@ -316,12 +316,12 @@ function insertOrUpdateData(script, hasExistingData, newData) {
 
 function createDataMethod(newData) {
   const newDataAst = recast.parse(`export default {
-    data() {
-      return {
-        ${newData}
-      };
-    },
-  };`, {
+  data() {
+    return {
+${newData.split("\n").map(line => "    " + line).join("\n")}
+    };
+  },
+};`, {
     parser: parser,
   });
 

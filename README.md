@@ -14,7 +14,7 @@
 ## 使用方法
 
 1. **打开一个 Vue 文件**：打开你想要生成 `data` 和 `methods` 的 Vue 文件。
-2. **运行命令**：按 `Ctrl+Shift+P`（Windows/Linux）或 `Cmd+Shift+P`（Mac）打开命令面板，然后输入并选择 `Generate Vue Data and Methods`。
+2. **运行命令**：按 `Ctrl+Shift+P`（Windows/Linux）或 `Cmd+Shift+P`（Mac）打开命令面板，然后输入并选择 `Generate Missing Data`。
 3. **查看结果**：扩展将解析模板，并自动将生成的 `data` 和 `methods` 添加到你的 Vue 组件的脚本部分。
 
 ## 安装

@@ -10,13 +10,32 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.createDataAndMethods"
+    "onCommand:extension.generateMissingDataAndMethods",
+    "onCommand:extension.generateMissingData",
+    "onCommand:extension.generateMissingMethods"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "extension.createDataAndMethods",
-        "title": "Create Missing Data and Methods in Vue File"
+        "command": "extension.generateMissingDataAndMethods",
+        "title": "Generate Missing Data and Methods",
+        "category": "Vue Data Methods Auto Gen",
+        "description": "Generate missing data methods for Vue components",
+        "shortTitle": "通过template生成缺失的data和methods"
+      },
+      {
+        "command": "extension.generateMissingData",
+        "title": "Generate Missing Data",
+        "category": "Vue Data Methods Auto Gen",
+        "description": "Generate missing data for Vue components",
+        "shortTitle": "通过template生成缺失的data"
+      },
+      {
+        "command": "extension.generateMissingMethods",
+        "title": "Generate Missing Methods",
+        "category": "Vue Data Methods Auto Gen",
+        "description": "Generate missing methods for Vue components",
+        "shortTitle": "通过template生成缺失的methods"
       }
     ]
   },
@@ -32,9 +51,10 @@
     "@types/vscode": "^1.89.0",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.3.9",
+    "cheerio": "1.0.0-rc.12",
     "eslint": "^8.57.0",
+    "jest": "^29.7.0",
     "recast": "^0.23.7",
-    "typescript": "^5.4.5",
-    "cheerio": "1.0.0-rc.12"
+    "typescript": "^5.4.5"
   }
 }

@@ -7,14 +7,18 @@
 ## 功能
 
 - **自动生成数据属性**：解析 Vue 模板以识别并生成适当的 `data` 属性。
-- **自动生成方法**： （计划中的功能）分析模板以识别并生成组件所需的 `methods`。
+- **自动生成方法**：分析模板以识别并生成组件所需的 `methods`。
 - **模板分析**：支持插值、指令（`v-bind`、`v-if`、`v-for` 等）和内联样式。
 - **直观的命令**：通过 VS Code 命令面板轻松生成 `data` 和 `methods`。
 
 ## 使用方法
 
 1. **打开一个 Vue 文件**：打开你想要生成 `data` 和 `methods` 的 Vue 文件。
-2. **运行命令**：按 `Ctrl+Shift+P`（Windows/Linux）或 `Cmd+Shift+P`（Mac）打开命令面板，然后输入并选择 `Generate Missing Data`。
+2. **运行命令**：
+   - 按 `Ctrl+Shift+P`（Windows/Linux）或 `Cmd+Shift+P`（Mac）打开命令面板。
+   - 输入并选择 `Generate Missing Data` 以生成缺失的 `data` 属性。
+   - 输入并选择 `Generate Missing Methods` 以生成缺失的 `methods` 属性。
+   - 输入并选择 `Generate Missing Data and Methods` 以同时生成缺失的 `data` 和 `methods` 属性。
 3. **查看结果**：扩展将解析模板，并自动将生成的 `data` 和 `methods` 添加到你的 Vue 组件的脚本部分。
 
 ## 安装
@@ -28,7 +32,7 @@
 
 1. 克隆这个仓库：
    ```sh
-   git clone https://github.com/your-username/vue-data-methods-auto-gen.git
+   git clone https://github.com/Chloeyayo/vue-data-methods-auto-gen.git
    ```
 2. 进入项目目录并安装依赖：
    ```sh
@@ -47,7 +51,7 @@
 
 ### 提交问题
 
-如果你在使用过程中遇到问题，请在 [GitHub Issues](https://github.com/your-username/vue-data-methods-auto-gen/issues) 页面提交详细的描述。
+如果你在使用过程中遇到问题，请在 [GitHub Issues](https://github.com/Chloeyayo/vue-data-methods-auto-gen/issues) 页面提交详细的描述。
 
 ### 提交拉取请求
 

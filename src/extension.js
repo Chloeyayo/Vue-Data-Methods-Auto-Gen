@@ -7,18 +7,25 @@ const { extractMethods, buildMethodsObject, generateMethodsString } = require('.
 const { extractBlock, extractContent, ensureTrailingComma, insertOrUpdateData, insertOrUpdateMethods, removeComments } = require('./utils')
 let outputChannel;
 
-function activate(context) {
-  console.log('Extension "Vue Data Methods Auto Gen" is now active!');
-
-  // 创建输出通道
-  outputChannel = vscode.window.createOutputChannel('Vue Data Methods Auto Gen');
-  outputChannel.appendLine('Extension "Vue Data Methods Auto Gen" is now active!');
-  const generateDataCommand = vscode.commands.registerCommand('extension.generateMissingData', () => generateMissing('data'));
-  const generateMethodsCommand = vscode.commands.registerCommand('extension.generateMissingMethods', () => generateMissing('methods'));
-  const generateDataAndMethodsCommand = vscode.commands.registerCommand('extension.generateMissingDataAndMethods', () => generateMissing('both'));
-
-  context.subscriptions.push(generateDataCommand, generateMethodsCommand, generateDataAndMethodsCommand);
-}
+  function activate(context) {
+    console.log('Extension "Vue Data Methods Auto Gen" is now active!');
+  
+    // 创建输出通道
+    outputChannel = vscode.window.createOutputChannel('Vue Data Methods Auto Gen');
+    outputChannel.appendLine('Extension "Vue Data Methods Auto Gen" is now active!');
+  
+    try {
+      const generateDataCommand = vscode.commands.registerCommand('extension.generateMissingData', () => generateMissing('data'));
+      const generateMethodsCommand = vscode.commands.registerCommand('extension.generateMissingMethods', () => generateMissing('methods'));
+      const generateDataAndMethodsCommand = vscode.commands.registerCommand('extension.generateMissingDataAndMethods', () => generateMissing('both'));
+  
+      context.subscriptions.push(generateDataCommand, generateMethodsCommand, generateDataAndMethodsCommand);
+      
+      outputChannel.appendLine('Commands registered successfully.');
+    } catch (error) {
+      outputChannel.appendLine(`Error registering commands: ${error.message}`);
+    }
+  }
 
 function generateMissing(type) {
   const editor = vscode.window.activeTextEditor;

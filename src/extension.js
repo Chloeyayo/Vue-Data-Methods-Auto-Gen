@@ -100,7 +100,7 @@ function getTemplateAndScript(document) {
 function extractDataNames(template) {
   const dataNames = new Set()
   const booleanValues = new Set(['true', 'false'])
-  const commonAttributes = new Set(['class', 'value', 'prop', 'style', 'key'])
+  const commonAttributes = new Set(['class', 'value', 'prop', 'style', 'key','Object','Array'])
   const scopeVariables = new Set()
   const validIdentifier = /^[a-zA-Z_$][0-9a-zA-Z_$\.]*$/
 

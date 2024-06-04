@@ -1,8 +1,15 @@
 {
   "name": "vue-data-methods-auto-gen",
-  "displayName": "vueDataMethodsAutoGen",
-  "description": "",
-  "version": "0.0.1",
+  "displayName": "VueDataMethodsAutoGen",
+  "description": "Generate missing data or methods for Vue2 components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chloeyayo/Vue-Data-Methods-Auto-Gen.git"
+  },
+	"license": "MIT",
+  "publisher":"Chloeyayo",
+  "icon": "icon.png",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.89.0"
   },
@@ -54,7 +61,6 @@
     "cheerio": "1.0.0-rc.12",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
-    "recast": "^0.23.7",
-    "typescript": "^5.4.5"
+    "recast": "^0.23.7"
   }
 }

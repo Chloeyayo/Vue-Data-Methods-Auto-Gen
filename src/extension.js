@@ -3,89 +3,89 @@ const cheerio = require('cheerio')
 const recast = require('recast')
 const types = recast.types
 const parser = require('recast/parsers/babel')
-const he = require('he');
+const he = require('he')
 const { extractMethods, buildMethodsObject, generateMethodsString } = require('./methodsGen')
 const { extractBlock, extractContent, ensureTrailingComma, insertOrUpdateData, insertOrUpdateMethods, removeComments } = require('./utils')
-let outputChannel;
+let outputChannel
+const scopeVariables = new Set()
 
-  function activate(context) {
-    console.log('Extension "Vue Data Methods Auto Gen" is now active!');
-  
-    // 创建输出通道
-    outputChannel = vscode.window.createOutputChannel('Vue Data Methods Auto Gen');
-    outputChannel.appendLine('Extension "Vue Data Methods Auto Gen!" is now active!');
-  
-    try {
-      const generateDataCommand = vscode.commands.registerCommand('extension.generateMissingData', () => generateMissing('data'));
-      const generateMethodsCommand = vscode.commands.registerCommand('extension.generateMissingMethods', () => generateMissing('methods'));
-      const generateDataAndMethodsCommand = vscode.commands.registerCommand('extension.generateMissingDataAndMethods', () => generateMissing('both'));
-  
-      context.subscriptions.push(generateDataCommand, generateMethodsCommand, generateDataAndMethodsCommand);
-      
-      outputChannel.appendLine('Commands registered successfully.');
-    } catch (error) {
-      outputChannel.appendLine(`Error registering commands: ${error.message}`);
-    }
+function activate(context) {
+  console.log('Extension "Vue Data Methods Auto Gen" is now active!')
+
+  // 创建输出通道
+  outputChannel = vscode.window.createOutputChannel('Vue Data Methods Auto Gen')
+  outputChannel.appendLine('Extension "Vue Data Methods Auto Gen!" is now active!')
+
+  try {
+    const generateDataCommand = vscode.commands.registerCommand('extension.generateMissingData', () => generateMissing('data'))
+    const generateMethodsCommand = vscode.commands.registerCommand('extension.generateMissingMethods', () => generateMissing('methods'))
+    const generateDataAndMethodsCommand = vscode.commands.registerCommand('extension.generateMissingDataAndMethods', () => generateMissing('both'))
+
+    context.subscriptions.push(generateDataCommand, generateMethodsCommand, generateDataAndMethodsCommand)
+
+    outputChannel.appendLine('Commands registered successfully.')
+  } catch (error) {
+    outputChannel.appendLine(`Error registering commands: ${error.message}`)
   }
+}
 
 function generateMissing(type) {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) return;
+  const editor = vscode.window.activeTextEditor
+  if (!editor) return
 
-  const document = editor.document;
+  const document = editor.document
   if (document.languageId !== 'vue') {
-    vscode.window.showInformationMessage('Please open a Vue file.');
-    return;
+    vscode.window.showInformationMessage('Please open a Vue file.')
+    return
   }
 
   try {
-    const { template, script } = getTemplateAndScript(document);
-    let newScript = script;
+    const { template, script } = getTemplateAndScript(document)
+    let newScript = script
 
     if (type === 'data' || type === 'both') {
-      const dataNames = extractDataNames(template);
-      const { vForItems, vForItemsItemList } = parseVFor(template);
-      const existingKeys = extractExistingKeys(script);
-      const dataObject = buildDataObject(dataNames, vForItems, existingKeys, vForItemsItemList);
-      const newData = generateDataString(dataObject);
+      const dataNames = extractDataNames(template)
+      const { vForItems, vForItemsItemList } = parseVFor(template)
+      const existingKeys = extractExistingKeys(script)
+      const dataObject = buildDataObject(dataNames, vForItems, existingKeys, vForItemsItemList)
+      const newData = generateDataString(dataObject)
 
       if (newData) {
-        newScript = insertOrUpdateData(newScript, newData);
-        outputChannel.appendLine(`Data generated: ${Object.keys(dataObject).join(', ')}`);
+        newScript = insertOrUpdateData(newScript, newData)
+        outputChannel.appendLine(`Data generated: ${Object.keys(dataObject).join(', ')}`)
       } else if (type === 'data') {
-        vscode.window.showInformationMessage('No data to create.');
+        vscode.window.showInformationMessage('No data to create.')
       }
     }
 
     if (type === 'methods' || type === 'both') {
-      const methodNames = extractMethods(template);
-      const methodsObject = buildMethodsObject(methodNames, extractExistingKeys(script));
-      const newMethods = generateMethodsString(methodsObject);
+      const methodNames = extractMethods(template)
+      const methodsObject = buildMethodsObject(methodNames, extractExistingKeys(script))
+      const newMethods = generateMethodsString(methodsObject)
 
       if (newMethods) {
-        newScript = insertOrUpdateMethods(newScript, newMethods);
-        outputChannel.appendLine(`Methods generated: ${Object.keys(methodsObject).join(', ')}`);
+        newScript = insertOrUpdateMethods(newScript, newMethods)
+        outputChannel.appendLine(`Methods generated: ${Object.keys(methodsObject).join(', ')}`)
       } else if (type === 'methods') {
-        vscode.window.showInformationMessage('No methods to create.');
+        vscode.window.showInformationMessage('No methods to create.')
       }
     }
 
     if (newScript !== script) {
-      applyEdits(editor, document, newScript);
-      outputChannel.appendLine('Script updated successfully.');
+      applyEdits(editor, document, newScript)
+      outputChannel.appendLine('Script updated successfully.')
     } else if (type === 'both') {
-      vscode.window.showInformationMessage('No data or methods to create.');
+      vscode.window.showInformationMessage('No data or methods to create.')
     }
   } catch (error) {
-    vscode.window.showErrorMessage(`Error: ${error.message}`);
-    outputChannel.appendLine(`Error: ${error.message}`);
+    vscode.window.showErrorMessage(`Error: ${error.message}`)
+    outputChannel.appendLine(`Error: ${error.message}`)
   }
 }
 
 function getTemplateAndScript(document) {
   const text = document.getText()
   const $ = cheerio.load(text, { xmlMode: true })
-  console.log(123)
 
   removeComments($)
 
@@ -102,8 +102,7 @@ function getTemplateAndScript(document) {
 function extractDataNames(template) {
   const dataNames = new Set()
   const booleanValues = new Set(['true', 'false'])
-  const commonAttributes = new Set(['class', 'value', 'prop', 'style', 'key','Object','Array','length'])
-  const scopeVariables = new Set()
+  const commonAttributes = new Set(['class', 'value', 'prop', 'style', 'key', 'Object', 'Array', 'length'])
   const validIdentifier = /^[a-zA-Z_$][0-9a-zA-Z_$\.]*$/
 
   // 解析插值表达式和常规绑定
@@ -193,6 +192,15 @@ function parseVFor(template) {
     vForItems[list] = { item, index }
   }
 
+  // 跳过作用域变量
+  scopeVariables.forEach(scopeVar => {
+    Object.keys(vForItems).forEach(list => {
+      if (list.startsWith(`${scopeVar}.`)) {
+        delete vForItems[list]
+      }
+    })
+  })
+
   return { vForItems, vForItemsItemList }
 }
 
@@ -209,7 +217,7 @@ function extractExistingKeys(script) {
 
     recast.visit(ast, {
       visitObjectMethod(path) {
-        if (path.node.key.name === 'data') {
+        if (path.node.key?.name === 'data') {
           const returnStatement = path.node.body.body.find(n => n.type === 'ReturnStatement')
           if (returnStatement && returnStatement.argument && returnStatement.argument.properties) {
             dataKeys = returnStatement.argument.properties.map(prop => prop.key.name)
@@ -218,19 +226,19 @@ function extractExistingKeys(script) {
         this.traverse(path)
       },
       visitObjectProperty(path) {
-        if (path.node.key.name === 'computed') {
+        if (path.node.key?.name === 'computed') {
           if (path.node.value.type === 'ObjectExpression') {
-            computedKeys = path.node.value.properties.map(prop => prop.key.name)
+            computedKeys = path.node.value.properties.map(prop => prop.key?.name)
           }
-        } else if (path.node.key.name === 'props') {
+        } else if (path.node.key?.name === 'props') {
           if (path.node.value.type === 'ObjectExpression') {
-            propsKeys = path.node.value.properties.map(prop => prop.key.name)
+            propsKeys = path.node.value.properties.map(prop => prop.key?.name)
           } else if (path.node.value.type === 'ArrayExpression') {
             propsKeys = path.node.value.elements.map(element => element.value)
           }
-        } else if (path.node.key.name === 'methods') {
+        } else if (path.node.key?.name === 'methods') {
           if (path.node.value.type === 'ObjectExpression') {
-            methodsKeys = methodsKeys.concat(path.node.value.properties.map(prop => prop.key.name))
+            methodsKeys = methodsKeys.concat(path.node.value.properties.map(prop => prop.key?.name))
           }
           return false // Prevent further traversal within the methods object
         }

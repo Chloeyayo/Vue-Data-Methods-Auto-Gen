@@ -3,6 +3,7 @@ const cheerio = require('cheerio')
 const recast = require('recast')
 const types = recast.types
 const parser = require('recast/parsers/babel')
+const he = require('he');
 const { extractMethods, buildMethodsObject, generateMethodsString } = require('./methodsGen')
 const { extractBlock, extractContent, ensureTrailingComma, insertOrUpdateData, insertOrUpdateMethods, removeComments } = require('./utils')
 let outputChannel;
@@ -88,8 +89,8 @@ function getTemplateAndScript(document) {
 
   removeComments($)
 
-  const template = $('template').html()
-  const script = $('script').html()
+  const template = he.decode($('template').html())
+  const script = he.decode($('script').html())
 
   if (!template || !script) {
     throw new Error('Invalid Vue file format.')

@@ -12,7 +12,7 @@ let outputChannel;
   
     // 创建输出通道
     outputChannel = vscode.window.createOutputChannel('Vue Data Methods Auto Gen');
-    outputChannel.appendLine('Extension "Vue Data Methods Auto Gen" is now active!');
+    outputChannel.appendLine('Extension "Vue Data Methods Auto Gen!" is now active!');
   
     try {
       const generateDataCommand = vscode.commands.registerCommand('extension.generateMissingData', () => generateMissing('data'));
@@ -32,10 +32,10 @@ function generateMissing(type) {
   if (!editor) return;
 
   const document = editor.document;
-  if (document.languageId !== 'vue') {
-    vscode.window.showInformationMessage('Please open a Vue file.');
-    return;
-  }
+  // if (document.languageId !== 'vue') {
+  //   vscode.window.showInformationMessage('Please open a Vue file.');
+  //   return;
+  // }
 
   try {
     const { template, script } = getTemplateAndScript(document);
@@ -83,7 +83,8 @@ function generateMissing(type) {
 
 function getTemplateAndScript(document) {
   const text = document.getText()
-  const $ = cheerio.load(text, { xmlMode: false })
+  const $ = cheerio.load(text, { xmlMode: true })
+  console.log(123)
 
   removeComments($)
 
@@ -100,7 +101,7 @@ function getTemplateAndScript(document) {
 function extractDataNames(template) {
   const dataNames = new Set()
   const booleanValues = new Set(['true', 'false'])
-  const commonAttributes = new Set(['class', 'value', 'prop', 'style', 'key','Object','Array'])
+  const commonAttributes = new Set(['class', 'value', 'prop', 'style', 'key','Object','Array','length'])
   const scopeVariables = new Set()
   const validIdentifier = /^[a-zA-Z_$][0-9a-zA-Z_$\.]*$/
 
@@ -139,8 +140,8 @@ function extractDataNames(template) {
 
   // 检查变量名是否有效
   const isValidDataName = name => {
-    name = name.trim().split('.').at(-1)
-    return validIdentifier.test(name) && !name.startsWith('$') && !booleanValues.has(name) && !commonAttributes.has(name)
+    name = name.trim().split('.')
+    return name.every(part => validIdentifier.test(part) && !booleanValues.has(part) && !commonAttributes.has(part))
   }
 
   // 处理模板中的绑定和插值

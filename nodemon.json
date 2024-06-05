@@ -1,0 +1,5 @@
+{
+  "watch": ["out"],
+  "ext": "js,json",
+  "exec": "code ${workspaceFolder} --extensionDevelopmentPath=${workspaceFolder}"
+}

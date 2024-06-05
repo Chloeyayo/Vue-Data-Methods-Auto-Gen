@@ -1,21 +1,24 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
   entry: './src/extension.js',
   output: {
-    filename: 'extension.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'commonjs2',
+    filename: 'extension.js',
+    libraryTarget: 'commonjs2'
   },
   target: 'node',
+  mode: 'development',
+  watch: true,
+  devtool: 'source-map', // 确保启用 source map
   externals: {
-    vscode: 'commonjs vscode',
+    vscode: 'commonjs vscode'
   },
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
+  resolve: {
+    extensions: ['.js'],
+    alias: {
+      babylon: '@babel/parser'
+    }
   },
   module: {
     rules: [
@@ -23,12 +26,9 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.js'],
-  },
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  }
 };

@@ -32,10 +32,10 @@ function generateMissing(type) {
   if (!editor) return;
 
   const document = editor.document;
-  // if (document.languageId !== 'vue') {
-  //   vscode.window.showInformationMessage('Please open a Vue file.');
-  //   return;
-  // }
+  if (document.languageId !== 'vue') {
+    vscode.window.showInformationMessage('Please open a Vue file.');
+    return;
+  }
 
   try {
     const { template, script } = getTemplateAndScript(document);

@@ -6,10 +6,13 @@
 
 ## 功能
 
+![Vue Data Methods Auto Gen 功能演示](https://i2.mjj.rip/2024/06/05/9d107260a90b5ad7bf9d874532fe9a6b.gif)
+
 - **自动生成数据属性**：解析 Vue 模板以识别并生成适当的 `data` 属性。
 - **自动生成方法**：分析模板以识别并生成组件所需的 `methods`。
 - **模板分析**：支持插值、指令（`v-bind`、`v-if`、`v-for` 等）和内联样式。
 - **直观的命令**：通过 VS Code 命令面板轻松生成 `data` 和 `methods`。
+
 
 ## 使用方法
 

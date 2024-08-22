@@ -9,7 +9,7 @@
   "license": "MIT",
   "publisher": "Chloeyayo",
   "icon": "icon.png",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "engines": {
     "vscode": "^1.89.0"
   },

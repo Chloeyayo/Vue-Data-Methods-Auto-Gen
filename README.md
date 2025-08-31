@@ -6,7 +6,7 @@
 
 ## 功能
 
-![Vue Data Methods Auto Gen 功能演示](https://github.com/user-attachments/assets/059b33d5-77eb-483f-8ff3-43bc0b7ac526)
+![Vue Data Methods Auto Gen 功能演示](./demo.gif)
 
 - **自动生成数据属性**：解析 Vue 模板以识别并生成适当的 `data` 属性。
 - **自动生成方法**：分析模板以识别并生成组件所需的 `methods`。
